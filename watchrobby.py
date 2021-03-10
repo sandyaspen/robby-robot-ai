@@ -43,45 +43,52 @@ FPS = 60
 GRID_WIDTH = 10
 GRID_HEIGHT = 10
 
-clock = pygame.time.Clock()
-pygame.init()
-WINDOW_SIZE = [555, 555]
-screen = pygame.display.set_mode(WINDOW_SIZE)
-pygame.display.set_caption("Robby the robot")
-screen.fill(BLACK)
+# Making some changes for better integration - sandyaspen
+
 
 def watchEpisode(gridSequence, episode):
-  """
-  Pass in a list of grids, one for each step in the episode, as well as the episode number.
-  If using a numpy array to encapsulate the grid, call tolist() on it before storing
-  it in the sequence list. See usage example 2.
-  """
-  for step, grid in enumerate(gridSequence):
-    pygame.display.set_caption("Robby the robot episode: " + str(episode) + " step: " + str(step))
-    render(grid, episode, step)
+    """
+    Pass in a list of grids, one for each step in the episode, as well as the episode number.
+    If using a numpy array to encapsulate the grid, call tolist() on it before storing
+    it in the sequence list. See usage example 2.
+    """
+    for step, grid in enumerate(gridSequence):
+        pygame.display.set_caption(
+            "Robby the robot episode: " + str(episode) + " step: " + str(step))
+        render(grid, episode, step)
 
-  
+
 def render(grid, episode, step):
-  """
-  Pass in a grid to be rendered, will only draw one step and will need to be called each step.
-  See usage example 1.
-  """
-  pygame.display.set_caption("Robby the robot episode: " + str(episode) + " step: " + str(step))
-  for event in pygame.event.get():
-    if event.type == pygame.QUIT:
-      pygame.quit()
-  for row in range(GRID_HEIGHT):
-    for column in range(GRID_WIDTH):
-      if grid[column][row] >= 2:
-        color = RED
-      else:
-        color = WHITE
-      pygame.draw.rect(screen,color,[(MARGIN + WIDTH) * column + MARGIN,(MARGIN + HEIGHT) * row + MARGIN,WIDTH,HEIGHT])
-      if grid[column][row] % 2 == 1:
-        color = BLACK
-        pygame.draw.circle(screen,color,((MARGIN + WIDTH) * column + MARGIN + int(WIDTH/2),(MARGIN + HEIGHT) * row + MARGIN + int(HEIGHT/2)),int(WIDTH/4))
-  clock.tick(FPS)
-  pygame.display.flip()
+    """
+    Pass in a grid to be rendered, will only draw one step and will need to be called each step.
+    See usage example 1.
+    """
+    clock = pygame.time.Clock()
+    pygame.init()
+    WINDOW_SIZE = [555, 555]
+    screen = pygame.display.set_mode(WINDOW_SIZE)
+    pygame.display.set_caption("Robby the robot")
+    screen.fill(BLACK)
+    pygame.display.set_caption(
+        "Robby the robot episode: " + str(episode) + " step: " + str(step))
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+    for row in range(GRID_HEIGHT):
+        for column in range(GRID_WIDTH):
+            if grid[column][row] >= 2:
+                color = RED
+            else:
+                color = WHITE
+            pygame.draw.rect(screen, color, [
+                             (MARGIN + WIDTH) * column + MARGIN, (MARGIN + HEIGHT) * row + MARGIN, WIDTH, HEIGHT])
+            if grid[column][row] % 2 == 1:
+                color = BLACK
+                pygame.draw.circle(screen, color, ((MARGIN + WIDTH) * column + MARGIN + int(
+                    WIDTH/2), (MARGIN + HEIGHT) * row + MARGIN + int(HEIGHT/2)), int(WIDTH/4))
+    clock.tick(FPS)
+    pygame.display.flip()
+
 
 def quit():
-  pygame.quit()
+    pygame.quit()
