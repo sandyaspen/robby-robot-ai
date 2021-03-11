@@ -79,7 +79,7 @@ class Robby:
             else:
                 return -5  # Reward: Crashed into wall
 
-    def train(self, episodes=5000, steps=200, learning_rate=0.2, discount=0.9, epsilon=.1, graphics=False):
+    def train(self, episodes=5000, steps=200, learning_rate=0.2, discount=0.9, epsilon=.1, graphics=False, decay=True, tax=False):
         episode_rewards = 0
         episode_reward_list = []
         rewards_sum = 0
@@ -101,6 +101,9 @@ class Robby:
                 action = self.decide(epsilon)
                 # Perform Action, collect reward
                 reward = self.act(action)
+                #Perform action tax
+                if tax:
+                    reward -= 0.5
                 # Observe the New State which now exists after our action
                 next_state = self.sense_state()
                 self.add_state_to_q(next_state)
@@ -126,15 +129,15 @@ class Robby:
                 if done:
                     break
             # Print out numbers
-            if episode % 5 == 0:
-                print("EP: {:04d} | REWARD: {:03d} | EPSILON: {}".format(
+            if episode % 5 == 4:
+                print("EP: {:04d} | REWARD: {:3.1f} | EPSILON: {}".format(
                     episode, episode_rewards, epsilon), end='\r')
             episode_reward_list.append(episode_rewards)
             episode_rewards = 0
             # decay epsilon
-            if episode % 50 == 0:
-                epsilon -= .001
-
+            if decay:
+                if episode % 50 == 0:
+                    epsilon -= .001
         if graphics:
             watchrobby.quit()
         return self.q, episode_reward_list
